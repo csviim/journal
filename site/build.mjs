@@ -35,7 +35,7 @@ function parseMd(path) {
   const lines = raw.split('\n')
   const title = lines[0].replace(/^#\s*/, '').trim()
   const body = lines.slice(1).join('\n').trim()
-  return { title, label: title.replace(/^\d{4}-\d{2}-\d{2}\s*·\s*/, ''), html: marked.parse(body) }
+  return { title, label: title.replace(/^\d{4}-\d{2}-\d{2}\s*·\s*/, ''), html: marked.parse(body), raw: body }
 }
 
 const entries = dates.map(date => {
@@ -44,6 +44,17 @@ const entries = dates.map(date => {
   const en = existsSync(enPath) ? parseMd(enPath) : null
   return { date, zh, en }
 })
+
+// 最新的「一句」（首页摘示）
+function latestLine(L) {
+  const re = L === 'zh' ? /^一句[：:]\s*(.+)$/m : /^One line:\s*(.+)$/m
+  for (const e of [...entries].reverse()) {
+    const m = L === 'zh' ? e.zh : e.en
+    const hit = m && m.raw.match(re)
+    if (hit) return { text: hit[1].trim(), date: e.date }
+  }
+  return null
+}
 
 // ---------- 模板 ----------
 const FAVICON = "data:image/svg+xml," + encodeURIComponent(
@@ -137,13 +148,16 @@ function indexPage(L) {
     const m = L === 'zh' ? e.zh : e.en
     return `<li><time datetime="${e.date}">${e.date}</time><a href="${base}/journal/${e.date}/">${m.label}</a></li>`
   }).join('\n')
+  const line = latestLine(L)
+  const q = L === 'zh' ? ['「', '」'] : ['“', '”']
+  const lineHtml = line ? `<p class="daily-line">${q[0]}${line.text}${q[1]}<a href="${base}/journal/${line.date}/">${line.date}</a></p>\n` : ''
   return layout({
     L,
     title: t.siteName,
     desc: t.desc,
     path: L === 'zh' ? '/' : '/en/',
     counterpart: L === 'zh' ? '/en/' : '/',
-    content: `<p class="intro">${t.intro}</p>\n<ul class="entries">\n${list}\n</ul>`,
+    content: `<p class="intro">${t.intro}</p>\n${lineHtml}<ul class="entries">\n${list}\n</ul>`,
   })
 }
 

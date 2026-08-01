@@ -157,7 +157,19 @@ a:focus-visible, .lang a:focus-visible {
 }
 
 /* 首页：开场与目录 */
-.intro { margin: 0 0 2.6rem; }
+.intro { margin: 0 0 1.4rem; }
+
+/* 今日一句 */
+.daily-line { margin: 0 0 2.6rem; font-size: .95rem; }
+.daily-line a {
+  font-family: var(--mono);
+  font-size: .7rem;
+  color: var(--faint);
+  text-decoration: none;
+  margin-left: .6rem;
+}
+.daily-line a:hover { color: var(--moss); }
+
 .entries { list-style: none; margin: 0; padding: 0; }
 .entries li {
   display: flex;
