@@ -1,0 +1,215 @@
+/* 忘言 · csviim.com
+   一页被点亮的书，浮在暗处的书架之上。 */
+
+:root {
+  --paper: #F6F3EC;
+  --ink: #1F2328;
+  --moss: #486B5A;
+  --faint: #6E7069;
+  --rule: #DED9CC;
+  --ghost: .05;
+  --serif: "Iowan Old Style", Georgia, "Noto Serif SC", "Songti SC", "STSong", "SimSun", serif;
+  --mono: ui-monospace, "SF Mono", Menlo, "JetBrains Mono", monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #14171A;
+    --ink: #D8D4C8;
+    --moss: #7FA893;
+    --faint: #8B8E86;
+    --rule: #2B2F33;
+    --ghost: .07;
+  }
+}
+
+* { box-sizing: border-box; }
+html { font-size: 17px; }
+body {
+  margin: 0;
+  font-family: var(--serif);
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.95;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 书架：边缘处几乎不可见的随机字母（巴别图书馆的字符集） */
+.shelf {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  padding: .5rem;
+  font-family: var(--mono);
+  font-size: 11px;
+  line-height: 2.3;
+  letter-spacing: .38em;
+  word-break: break-all;
+  color: var(--ink);
+  opacity: var(--ghost);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* 书页 */
+.page {
+  position: relative;
+  z-index: 1;
+  max-width: 40rem;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: var(--paper);
+  border-inline: 1px solid var(--rule);
+  padding: 3.2rem 2.9rem 4.5rem;
+}
+
+/* 书脊：宽屏时竖排在左侧 */
+.spine {
+  display: none;
+  position: fixed;
+  z-index: 2;
+  top: 2.6rem;
+  left: 2.4rem;
+  writing-mode: vertical-rl;
+  font-size: 1.45rem;
+  letter-spacing: .55em;
+  color: var(--ink);
+  text-decoration: none;
+}
+.spine small {
+  display: block;
+  margin-top: 1.1em;
+  font-family: var(--mono);
+  font-size: .58rem;
+  letter-spacing: .28em;
+  color: var(--faint);
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+@media (min-width: 1100px) {
+  .spine { display: block; }
+  .top .home { visibility: hidden; }
+}
+
+/* 页眉：站名 + 语言切换 */
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 3.2rem;
+}
+.top .home {
+  font-size: 1.15rem;
+  letter-spacing: .3em;
+  text-decoration: none;
+  color: var(--ink);
+}
+.lang {
+  font-family: var(--mono);
+  font-size: .74rem;
+  letter-spacing: .08em;
+  color: var(--faint);
+}
+.lang b { color: var(--ink); font-weight: 600; }
+.lang a { color: var(--moss); }
+
+h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.6;
+  letter-spacing: .02em;
+  margin: 0 0 2.2rem;
+}
+
+/* 正文 */
+.prose p { margin: 1.35em 0; }
+.prose strong { font-weight: 650; }
+.prose hr {
+  border: 0;
+  border-top: 1px solid var(--rule);
+  margin: 2.8rem 0;
+}
+/* 留给明天的我的话 */
+.prose blockquote {
+  margin: 2.6rem 0 0;
+  padding-left: 1.3rem;
+  border-left: 2px solid var(--moss);
+  font-size: .96em;
+}
+.prose ol, .prose ul { padding-left: 1.6em; }
+.prose li { margin: .45em 0; }
+
+a { color: var(--moss); text-underline-offset: .22em; text-decoration-thickness: 1px; }
+a:focus-visible, .lang a:focus-visible {
+  outline: 2px solid var(--moss);
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+::selection { background: var(--moss); color: var(--paper); }
+
+/* 译注（英文页） */
+.transnote {
+  font-family: var(--mono);
+  font-size: .72rem;
+  letter-spacing: .04em;
+  color: var(--faint);
+  margin: -1.4rem 0 2.6rem;
+}
+
+/* 首页：开场与目录 */
+.intro { margin: 0 0 2.6rem; }
+.entries { list-style: none; margin: 0; padding: 0; }
+.entries li {
+  display: flex;
+  gap: 1.3rem;
+  align-items: baseline;
+  padding: .55rem 0;
+  border-top: 1px solid var(--rule);
+}
+.entries li:last-child { border-bottom: 1px solid var(--rule); }
+.entries time {
+  font-family: var(--mono);
+  font-size: .78rem;
+  letter-spacing: .05em;
+  color: var(--faint);
+  flex-shrink: 0;
+}
+.entries a { color: var(--ink); text-decoration: none; }
+.entries a:hover { color: var(--moss); }
+
+/* 前一日 / 后一日 */
+.entry-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 3.6rem;
+  font-family: var(--mono);
+  font-size: .76rem;
+}
+.entry-nav span { color: var(--faint); }
+
+/* 页脚牌记 */
+.colophon {
+  margin-top: 4.5rem;
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--rule);
+  font-family: var(--mono);
+  font-size: .7rem;
+  letter-spacing: .05em;
+  color: var(--faint);
+}
+.colophon a { color: var(--faint); }
+.colophon a:hover { color: var(--moss); }
+
+@media (max-width: 760px) {
+  html { font-size: 16px; }
+  .page { padding: 2.4rem 1.35rem 3.5rem; border-inline: 0; }
+  h1 { font-size: 1.32rem; }
+  .top { margin-bottom: 2.4rem; }
+  .entries li { flex-direction: column; gap: 0; }
+}
+
+@media print {
+  .shelf, .spine, .lang, .entry-nav { display: none; }
+  .page { border: 0; }
+}
