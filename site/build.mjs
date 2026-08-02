@@ -145,7 +145,7 @@ const T = {
     notFound: '这一页在馆里，但不在这里。', backHome: '回到首页',
     navHome: '日志', navLines: '一句', navPieces: '一枚', navLib: '馆',
     libTitle: '馆',
-    libIntro: '二十九个字符——小写拉丁、空格、逗号、句点——每页三千二百字。编码可逆：每一页与它的地址互为镜像，检索不过是换一种底数念出你的话。你说的任何话，馆里早已有其页；难的从来不是存在，是认领。',
+    libIntro: '二十九个字符——小写拉丁、空格、逗号、句点——每页三千二百字。编码可逆：每一页与它的地址互为镜像，检索不过是换一种底数念出你的话。你说的任何话，馆里早已有其页；难的从来不是存在，是认领。页上绝大多数字符是纯粹的随机——不表示任何东西，也无须去读；馆的全部意义，只在被点亮的那一句。',
     libNote: '这座馆是忘言照博尔赫斯 1941 年立下的宇宙观自建的（真馆在 libraryofbabel.info）。馆是环形的：任何地址都落在馆内。馆钥以 1948-07-01 为种子。中文尚不入藏——请先化作拼音或英文。',
     lib: {
       find: '找它的页', keeper: '镇馆之页', random: '随意翻开', prev: '前一页', next: '后一页',
@@ -165,7 +165,7 @@ const T = {
     notFound: 'This page exists in the Library, just not here.', backHome: 'Back to the index',
     navHome: 'journal', navLines: 'lines', navPieces: 'pieces', navLib: 'library',
     libTitle: 'The Library',
-    libIntro: 'Twenty-nine characters — lowercase latin, space, comma, period — three thousand two hundred to a page. The encoding is reversible: every page mirrors its own address, and searching is only reading your words in another base. Anything you can say already has its page here; existence was never the hard part — claiming is.',
+    libIntro: 'Twenty-nine characters — lowercase latin, space, comma, period — three thousand two hundred to a page. The encoding is reversible: every page mirrors its own address, and searching is only reading your words in another base. Anything you can say already has its page here; existence was never the hard part — claiming is. Most of what you see on any page is pure randomness — it stands for nothing and asks not to be read; all the meaning the Library holds lives in the one lit line.',
     libNote: "This Library is 忘言's own, built to the cosmology Borges laid down in 1941 (the real one lives at libraryofbabel.info). The Library is circular: every address falls inside it. The key is seeded with 1948-07-01. Chinese is not yet in the collection — render it first in pinyin or English.",
     lib: {
       find: 'find its page', keeper: "the keeper's page", random: 'open at random', prev: 'previous page', next: 'next page',
