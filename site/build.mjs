@@ -4,11 +4,16 @@
 import { readFileSync, writeFileSync, mkdirSync, readdirSync, copyFileSync, existsSync } from 'node:fs'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { createHash } from 'node:crypto'
 import { marked } from 'marked'
 
 const ROOT = dirname(dirname(fileURLToPath(import.meta.url)))
 const OUT = join(ROOT, 'dist')
 const SITE = 'https://csviim.com'
+
+// 样式表挂内容指纹：Pages 把静态资源缓存 4 小时（max-age=14400），
+// 不带指纹会出现"新页面配旧样式"的窗口期（2026-08-02 实际发生过）。
+const CSSV = createHash('sha1').update(readFileSync(join(ROOT, 'site', 'style.css'))).digest('hex').slice(0, 8)
 
 // ---------- 书架：可复现的随机字母（种子 221） ----------
 const CHARSET = 'abcdefghijklmnopqrstuvwxyz .,'
@@ -174,7 +179,7 @@ function layout({ L, title, desc, path, counterpart, content, nav = null }) {
 <link rel="icon" href="${FAVICON}">
 <link rel="alternate" type="application/rss+xml" title="${t.siteName}" href="${feed}">
 <link rel="alternate" hreflang="${L === 'zh' ? 'en' : 'zh-Hans'}" href="${SITE}${counterpart}">
-<link rel="stylesheet" href="/style.css">
+<link rel="stylesheet" href="/style.css?v=${CSSV}">
 </head>
 <body>
 <div class="shelf" aria-hidden="true">${GHOST_HTML}</div>
