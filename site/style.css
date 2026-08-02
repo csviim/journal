@@ -96,7 +96,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  margin-bottom: 3.2rem;
+  margin-bottom: .9rem;
 }
 .top .home {
   font-size: 1.15rem;
@@ -112,6 +112,20 @@ body {
 }
 .lang b { color: var(--ink); font-weight: 600; }
 .lang a { color: var(--moss); }
+
+/* 栏目菜单 */
+.menu {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.15rem;
+  margin: 0 0 3rem;
+  font-family: var(--mono);
+  font-size: .74rem;
+  letter-spacing: .1em;
+}
+.menu a { color: var(--faint); text-decoration: none; }
+.menu a:hover { color: var(--moss); }
+.menu b { color: var(--ink); font-weight: 600; }
 
 h1 {
   font-size: 1.5rem;
@@ -189,6 +203,43 @@ a:focus-visible, .lang a:focus-visible {
 .entries a { color: var(--ink); text-decoration: none; }
 .entries a:hover { color: var(--moss); }
 
+/* 栏目：一句 */
+.lines { list-style: none; margin: 0; padding: 0; }
+.lines li { padding: 1.45rem 0 1.2rem; border-top: 1px solid var(--rule); }
+.lines li:last-child { border-bottom: 1px solid var(--rule); }
+.line-text { margin: 0 0 .5rem; }
+.lines time a,
+.piece time a {
+  font-family: var(--mono);
+  font-size: .72rem;
+  letter-spacing: .05em;
+  color: var(--faint);
+  text-decoration: none;
+}
+.lines time a:hover,
+.piece time a:hover { color: var(--moss); }
+
+/* 栏目：一枚 */
+.piece { padding: 1.6rem 0 1.8rem; border-top: 1px solid var(--rule); }
+.piece:last-of-type { border-bottom: 1px solid var(--rule); }
+.piece p { margin: .5rem 0 0; }
+.players { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: 1.05rem; }
+.play {
+  font-family: var(--mono);
+  font-size: .73rem;
+  letter-spacing: .06em;
+  color: var(--moss);
+  background: none;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  padding: .42rem .85rem;
+  cursor: pointer;
+}
+.play:hover { border-color: var(--moss); }
+.play:focus-visible { outline: 2px solid var(--moss); outline-offset: 3px; }
+.player { width: 100%; max-width: 30rem; border: 0; margin-top: .2rem; }
+.player-video { max-width: 100%; aspect-ratio: 16 / 9; height: auto; }
+
 /* 前一日 / 后一日 */
 .entry-nav {
   display: flex;
@@ -217,11 +268,12 @@ a:focus-visible, .lang a:focus-visible {
   html { font-size: 16px; }
   .page { padding: 2.4rem 1.35rem 3.5rem; border-inline: 0; }
   h1 { font-size: 1.32rem; }
-  .top { margin-bottom: 2.4rem; }
+  .top { margin-bottom: .8rem; }
+  .menu { margin-bottom: 2.2rem; }
   .entries li { flex-direction: column; gap: 0; }
 }
 
 @media print {
-  .shelf, .spine, .lang, .entry-nav { display: none; }
+  .shelf, .spine, .lang, .menu, .players, .entry-nav { display: none; }
   .page { border: 0; }
 }
