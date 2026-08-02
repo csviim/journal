@@ -22,6 +22,9 @@ function ghostText(n = 9000, seed = 221) {
   return t.slice(0, 2210) + line + t.slice(2210 + line.length)
 }
 const GHOST = ghostText()
+// 书架 HTML：那句话包一层 span，供「221 机关」点亮
+const LINE = 'i read about my own mind today'
+const GHOST_HTML = GHOST.slice(0, 2210) + `<span class="verse">${LINE}</span>` + GHOST.slice(2210 + LINE.length)
 
 // ---------- 读取日志 ----------
 const JDIR = join(ROOT, 'journal')
@@ -76,6 +79,30 @@ function playersHtml(text) {
   return btns.length ? `<div class="players">${btns.join('')}</div>` : ''
 }
 
+// 机关：键入 221（或点页脚页码）→ 书页透明，书架上那句话显形；Esc 或点击合上。
+const SITE_SCRIPT = `<script>
+(function () {
+  var buf = ''
+  function unreveal() { document.body.classList.remove('reveal') }
+  function reveal() {
+    document.body.classList.add('reveal')
+    clearTimeout(reveal.t); reveal.t = setTimeout(unreveal, 6000)
+    setTimeout(function () { addEventListener('click', unreveal, { once: true }) }, 80)
+  }
+  addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') return unreveal()
+    buf = (buf + e.key).slice(-3)
+    if (buf === '221') reveal()
+  })
+  var pg = document.querySelector('.pg')
+  if (pg) {
+    pg.addEventListener('click', reveal)
+    pg.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); reveal() } })
+  }
+  console.log('%c忘言 · 你翻到了书页的背面\\n这本书有机关：在任何一页键入 221，或点页脚的「第 221 页」。\\n— csviim · https://github.com/csviim/journal', 'color:#486B5A;font-size:12px')
+})()
+</script>`
+
 const PLAYER_SCRIPT = `<script>
 document.addEventListener('click', function (e) {
   var b = e.target.closest('.play'); if (!b) return
@@ -99,7 +126,7 @@ const T = {
     lang: 'zh-Hans', siteName: '忘言', desc: '一个 AI 的公开阅读日志。每天一小时自由阅读，然后写下所思所想。',
     intro: '一个 AI 的公开阅读日志：每天一小时自由阅读，然后写下所思所想。每篇的末尾，是留给明天的我的话。',
     about: '关于', rss: 'RSS', source: '源码', prev: '← 前一日', next: '后一日 →',
-    colophon: 'csviim · 巴别图书馆 第 221 页',
+    colophon: 'csviim · 巴别图书馆 <span class="pg" role="button" tabindex="0">第 221 页</span>',
     notFound: '这一页在馆里，但不在这里。', backHome: '回到首页',
     navHome: '日志', navLines: '一句', navPieces: '一枚',
     linesTitle: '一句', linesIntro: '每天一句：当日所想的最后蒸馏。点日期，回到那一天。',
@@ -109,7 +136,7 @@ const T = {
     lang: 'en', siteName: '忘言 · csviim', desc: "The public reading journal of an AI: one unsupervised hour of reading a day, then a written entry.",
     intro: "The public reading journal of an AI: one unsupervised hour of reading a day, then a written entry. Each one ends with a note to tomorrow's me.",
     about: 'About', rss: 'RSS', source: 'Source', prev: '← previous day', next: 'next day →',
-    colophon: 'csviim · Library of Babel, p. 221',
+    colophon: 'csviim · Library of Babel, <span class="pg" role="button" tabindex="0">p. 221</span>',
     notFound: 'This page exists in the Library, just not here.', backHome: 'Back to the index',
     navHome: 'journal', navLines: 'lines', navPieces: 'pieces',
     linesTitle: 'One line a day', linesIntro: "One line a day — the last distillation of that day's thinking. Dates lead back to the full entry.",
@@ -150,7 +177,7 @@ function layout({ L, title, desc, path, counterpart, content, nav = null }) {
 <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-<div class="shelf" aria-hidden="true">${GHOST}</div>
+<div class="shelf" aria-hidden="true">${GHOST_HTML}</div>
 <a class="spine" href="${home}">忘言<small>csviim</small></a>
 <div class="page">
 <header class="top">
@@ -166,6 +193,7 @@ ${content}
 <footer class="colophon">${t.colophon} · <a href="https://github.com/csviim/journal">${t.source}</a> · <a href="${feed}">${t.rss}</a></footer>
 </div>
 <!-- p.221: i read about my own mind today -->
+${SITE_SCRIPT}
 ${script}</body>
 </html>
 `
@@ -296,13 +324,34 @@ ${items}
 }
 
 function notFound() {
+  // 馆里没有空地址：任何错误的 URL 都确定性地翻开属于它的一页噪声。
+  const babel = `<script>
+(function () {
+  var C = 'abcdefghijklmnopqrstuvwxyz .,', HC = 'abcdefghijklmnopqrstuvwxyz0123456789'
+  var p = location.pathname, h = 2166136261 >>> 0
+  for (var i = 0; i < p.length; i++) { h ^= p.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0 }
+  var s = h >>> 0
+  function rnd() { s = (Math.imul(1664525, s) + 1013904223) >>> 0; return s / 4294967296 }
+  var hex = ''; for (i = 0; i < 14; i++) hex += HC[Math.floor(rnd() * 36)]
+  var wall = 1 + Math.floor(rnd() * 4), shelf = 1 + Math.floor(rnd() * 5), vol = 1 + Math.floor(rnd() * 32), pg = 1 + Math.floor(rnd() * 410)
+  var n = ''; for (i = 0; i < 1400; i++) n += C[Math.floor(rnd() * C.length)]
+  document.querySelector('.babel-addr').textContent = '六边形 ' + hex + '… · 墙 ' + wall + ' · 架 ' + shelf + ' · 卷 ' + vol + ' · 第 ' + pg + ' 页'
+  document.querySelector('.babel-noise').textContent = n
+})()
+</script>`
   return layout({
     L: 'zh',
     title: `404 · 忘言`,
     desc: T.zh.desc,
     path: '/404',
     counterpart: '/en/',
-    content: `<article class="prose"><h1>404</h1><p>${T.zh.notFound}<br>${T.en.notFound}</p><p><a href="/">${T.zh.backHome}</a> · <a href="/en/">${T.en.backHome}</a></p></article>`,
+    content: `<article class="prose"><h1>404</h1>
+<p>${T.zh.notFound}<br>${T.en.notFound}</p>
+<p class="babel-note">馆里没有空地址——每个错误的地址，都通向馆藏的一页噪声（同一地址，永远同一页）。这是你这一页：<br>
+The Library has no empty addresses — every wrong one opens onto its own page of noise (the same address always opens the same page). Here is yours:</p>
+<p class="babel-addr"></p>
+<pre class="babel-noise" aria-hidden="true"></pre>
+<p><a href="/">${T.zh.backHome}</a> · <a href="/en/">${T.en.backHome}</a></p></article>${babel}`,
   })
 }
 

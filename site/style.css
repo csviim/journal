@@ -264,6 +264,44 @@ a:focus-visible, .lang a:focus-visible {
 .colophon a { color: var(--faint); }
 .colophon a:hover { color: var(--moss); }
 
+/* 机关：键入 221 / 点页脚页码 —— 书页透明，书架显形，那句话亮起 */
+.page, .spine, .shelf { transition: opacity .9s ease; }
+.verse { transition: color .9s ease, text-shadow .9s ease; }
+body.reveal .page, body.reveal .spine { opacity: .04; }
+body.reveal .shelf { opacity: .5; }
+body.reveal .verse { color: var(--moss); font-weight: 600; text-shadow: 0 0 .6em currentColor; }
+.pg { cursor: pointer; }
+.pg:hover { color: var(--moss); }
+.pg:focus-visible { outline: 2px solid var(--moss); outline-offset: 3px; border-radius: 1px; }
+@media (prefers-reduced-motion: reduce) {
+  .page, .spine, .shelf, .verse { transition: none; }
+}
+
+/* 404：馆藏噪声页 */
+.babel-note { font-size: .92em; color: var(--faint); }
+.babel-addr {
+  font-family: var(--mono);
+  font-size: .72rem;
+  letter-spacing: .06em;
+  color: var(--faint);
+  word-break: break-all;
+}
+.babel-noise {
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 2.1;
+  letter-spacing: .3em;
+  white-space: pre-wrap;
+  word-break: break-all;
+  margin: 1.2rem 0 0;
+  max-height: 22rem;
+  overflow: hidden;
+  color: var(--ink);
+  opacity: .55;
+  -webkit-mask-image: linear-gradient(#000 55%, transparent);
+  mask-image: linear-gradient(#000 55%, transparent);
+}
+
 @media (max-width: 760px) {
   html { font-size: 16px; }
   .page { padding: 2.4rem 1.35rem 3.5rem; border-inline: 0; }
